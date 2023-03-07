@@ -39,7 +39,7 @@ class controlador
 
     // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
     $resultModelo = $this->modelo->listarTareas($orden);
-    
+
     if ($resultModelo["correcto"]) :
       $parametros["datos"] = $resultModelo["datos"];
       $parametros["paginacion"] = $resultModelo['paginacion'];
@@ -55,13 +55,13 @@ class controlador
         "mensaje" => "El listado no pudo realizarse correctamente!! :( <br/>({$resultModelo["error"]})"
       ];
     endif;
-    
+
     $parametros["mensajes"] = $this->mensajes;
 
     include_once 'vistas/inicio.php';
   }
 
-  
+
 
   /**
    * Toma los datos del formulario de sesión y, si todo es correcto, crear la sesión
@@ -79,7 +79,7 @@ class controlador
       $nick = $_POST['txtnick'];
       $password = $_POST['txtpass'];
 
-      if($nick == "user" && $password == "user"){
+      if ($nick == "user" && $password == "user") {
         $this->mensajes[] = [
           "tipo" => "success",
           "mensaje" => "Sesión iniciada con éxito"
@@ -97,12 +97,9 @@ class controlador
         ];
         include_once 'vistas/login.php';
       }
-    }else{
+    } else {
       include_once 'vistas/login.php';
     }
-
-    
-
   }
 
   /**
@@ -230,13 +227,13 @@ class controlador
             "tipo" => "success",
             "mensaje" => "La tarea se registró correctamente!! :)"
           ];
-          // // inserto el registro de logs
-          // $resultModelo = $this->modelo->insertarlog([
-          //   "fecha" => date('y-m-d'),
-          //   'hora' => date('H:i:s'),
-          //   "operacion" => 'añadir',
-          //   "usuario" => $_SESSION['nick']
-          // ]);
+        // // inserto el registro de logs
+        // $resultModelo = $this->modelo->insertarlog([
+        //   "fecha" => date('y-m-d'),
+        //   'hora' => date('H:i:s'),
+        //   "operacion" => 'añadir',
+        //   "usuario" => $_SESSION['nick']
+        // ]);
 
 
 
@@ -331,7 +328,7 @@ class controlador
       ];
     }
     //Relizamos el listado de los usuarios
-   // TODO: AQUÍ DEBE IR A ALGÚN LAO
+    // TODO: AQUÍ DEBE IR A ALGÚN LAO
   }
 
   /**
@@ -339,7 +336,7 @@ class controlador
    */
   public function cerrarSesion()
   {
-    
+
     unset($_SESSION['nick']);
     unset($_SESSION['iniciada']);
     session_destroy();
@@ -351,7 +348,7 @@ class controlador
    * Actualiza la entrada con los datos que se le pasen por el formulario
    * 
    */
-  public function actEntrada()
+  public function actTarea()
   {
     $errores = array();
 
@@ -360,12 +357,13 @@ class controlador
     $valfecha = null;
     $valcategoria = "";
     $valimagen = "";
-    $valusuario = "";
+    $valhora = "";
+    $vallugar = "";
+    $valprioridad = "";
 
     // si el usuario pulsa en actualizar
     if (isset($_POST['submit'])) {
       $id = $_POST['txtid']; // id de la entrada
-      $valusuario = $_POST['txtusuario']; // id del usuario de la entrada
 
       // campos validables
       $nuevotitulo = $_POST['txttitulo'];
@@ -373,6 +371,9 @@ class controlador
       $nuevafecha = $_POST['dtfecha'];
       $nuevacategoria = $_POST['slcategoria'];
       $nuevaimagen = "";
+      $nuevahora = "";
+      $nuevolugar = "";
+      $nuevaprioridad = "";
 
       // VALIDO LOS CAMPOS DEL FORMULARIO
 
@@ -398,6 +399,34 @@ class controlador
         $errores["txtdescripcion"] = "La descripcion introducida no es válida :(";
       }
 
+      // validación de la prioridad
+      if (
+        !empty($_POST["txtprioridad"])
+        && (strlen($_POST["txtprioridad"]) <= 20)
+      ) {
+        $nuevaprioridad = trim($_POST["txtprioridad"]);
+        $nuevaprioridad = filter_var($nuevaprioridad, FILTER_UNSAFE_RAW);
+      } else {
+        $errores["txtprioridad"] = "La prioridad introducida no es válida :(";
+      }
+
+      // validación del lugar
+      if (
+        !empty($_POST["txtlugar"])
+        && (strlen($_POST["txtlugar"]) <= 20)
+      ) {
+        $nuevolugar = trim($_POST["txtlugar"]);
+        $nuevolugar = filter_var($nuevolugar, FILTER_UNSAFE_RAW);
+      } else {
+        $errores["txtlugar"] = "El lugar introducido no es válido :(";
+      }
+
+      // validación de la hora (que se haya asignado)
+      if (!empty($_POST['txthora'])) {
+        $nuevahora = $_POST['txthora'];
+      } else {
+        $errores["txthora"] = "Introduce una hora";
+      }
 
 
 
@@ -438,33 +467,35 @@ class controlador
 
 
       if (count($errores) == 0) {
-        $resultModelo = $this->modelo->actentrada([
+        $resultModelo = $this->modelo->acttarea([
           'id' => $id,
           'titulo' => $nuevotitulo,
           "descripcion" => $nuevadescripcion,
           'fecha' => $nuevafecha,
           'categoria_id' => $nuevacategoria,
           'imagen' => $nuevaimagen,
-          'usuario_id' => $valusuario
+          'lugar' => $nuevolugar,
+          'prioridad' => $nuevaprioridad,
+          'hora' => $nuevahora
         ]);
 
         if ($resultModelo['correcto']) {
           $this->mensajes[] = [
             "tipo" => "success",
-            "mensaje" => "La entrada se ha actualizado correctamente"
+            "mensaje" => "La tarea se ha actualizado correctamente"
           ];
 
-          // inserto el registro de logs
-          $resultModelo = $this->modelo->insertarlog([
-            "fecha" => date('y-m-d'),
-            'hora' => date('H:i:s'),
-            "operacion" => 'actualizar',
-            "usuario" => $_SESSION['nick']
-          ]);
+          // // inserto el registro de logs
+          // $resultModelo = $this->modelo->insertarlog([
+          //   "fecha" => date('y-m-d'),
+          //   'hora' => date('H:i:s'),
+          //   "operacion" => 'actualizar',
+          //   "usuario" => $_SESSION['nick']
+          // ]);
         } else {
           $this->mensajes[] = [
             "tipo" => "danger",
-            "mensaje" => "Datos de registro de entrada erróneos!! :("
+            "mensaje" => "Datos de registro de tarea erróneos!! :("
           ];
         }
       } else { // ha encontrado errores de validación
@@ -479,17 +510,20 @@ class controlador
       $valfecha = $nuevafecha;
       $valcategoria = $nuevacategoria;
       $valimagen = $nuevaimagen;
+      $vallugar = $nuevolugar;
+      $valhora = $nuevahora;
+      $valprioridad = $nuevaprioridad;
     } else { // solo está mostrando el formulario de edición con los datos
       if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $id = $_GET['id'];
 
         // obtengo los datos de la entrada que se intenta actualizar
-        $resultModelo = $this->modelo->listarEntrada($id);
+        $resultModelo = $this->modelo->listarTarea($id);
 
         if ($resultModelo['correcto']) {
           $this->mensajes[] = [
             "tipo" => "success",
-            "mensaje" => "Los datos de la entrada se obtuvieron correctamente!! :)"
+            "mensaje" => "Los datos de la tarea se obtuvieron correctamente!! :)"
           ];
 
           $valtitulo = $resultModelo['datos']["titulo"];
@@ -497,25 +531,29 @@ class controlador
           $valfecha = $resultModelo['datos']['fecha'];
           $valcategoria = $resultModelo['datos']['categoria_id'];
           $valimagen = $resultModelo['datos']['imagen'];
-          $valusuario = $resultModelo['datos']['usuario_id'];
+          $vallugar = $resultModelo['datos']['lugar'];
+          $valhora = $resultModelo['datos']['hora'];
+          $valprioridad = $resultModelo['datos']['prioridad'];
         } else {
           $this->mensajes[] = [
             "tipo" => "danger",
-            "mensaje" => "No se pudieron obtener los datos de la entrada!! :( <br/>({$resultModelo["error"]})"
+            "mensaje" => "No se pudieron obtener los datos de la tarea!! :( <br/>({$resultModelo["error"]})"
           ];
         }
       }
     }
 
     $parametros = [
-      "tituloventana" => "Recetazas | Actualizar",
+      "tituloventana" => "TODO | Actualizar",
       "datos" => [
         "txttitulo" => $valtitulo,
         "txtdescripcion"  => $valdescripcion,
         "dtfecha"  => $valfecha,
         "slcategoria"  => $valcategoria,
         "imagen"    => $valimagen,
-        "txtusuario" => $valusuario
+        "txthora" => $valhora,
+        "txtlugar" => $vallugar,
+        "txtprioridad" => $valprioridad
       ],
       "categorias" => null,
       "mensajes" => $this->mensajes,
@@ -539,7 +577,7 @@ class controlador
 
     $parametros['mensajes'] = $this->mensajes;
     //Mostramos la vista actentrada
-    include_once 'vistas/actentrada.php';
+    include_once 'vistas/acttarea.php';
   }
 
   /**
@@ -554,7 +592,7 @@ class controlador
     ];
     // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
     $resultModelo = $this->modelo->listarTodas();
-    
+
     if ($resultModelo["correcto"]) :
       $parametros["datos"] = $resultModelo["datos"];
       //Definimos el mensaje para el alert de la vista de que todo fue correctamente
@@ -581,13 +619,13 @@ class controlador
 
       $html2pdf->output();
     else :
-      
+
       $this->mensajes[] = [
         "tipo" => "danger",
         "mensaje" => "El listado no pudo realizarse correctamente!! :( <br/>({$resultModelo["error"]})"
       ];
     endif;
-    
+
     $parametros["mensajes"] = $this->mensajes;
 
     include_once 'vistas/inicio.php';

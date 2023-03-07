@@ -232,7 +232,7 @@ class modelo
   /**
    * Actualiza una entrada existente a partir de unos datos
    */
-  public function actentrada($datos)
+  public function acttarea($datos)
   {
     $return = [
       "correcto" => false,
@@ -243,24 +243,28 @@ class modelo
       //Inicializamos la transacción
       $this->conexion->beginTransaction();
       //Definimos la instrucción SQL parametrizada 
-      $sql = "UPDATE entradas 
+      $sql = "UPDATE tareas 
       SET 
-        usuario_id = :usuario_id, 
         categoria_id = :categoria_id, 
         titulo = :titulo, 
         imagen = :imagen, 
         descripcion = :descripcion, 
-        fecha = :fecha
+        fecha = :fecha,
+        hora = :hora,
+        lugar = :lugar,
+        prioridad = :prioridad
           WHERE id=:id";
       $query = $this->conexion->prepare($sql);
       $query->execute([
         'id' => $datos["id"],
-        'usuario_id' => $datos["usuario_id"],
         'categoria_id' => $datos["categoria_id"],
         'titulo' => $datos["titulo"],
         'imagen' => $datos["imagen"],
         'descripcion' => $datos["descripcion"],
-        'fecha' => $datos["fecha"]
+        'fecha' => $datos["fecha"],
+        'hora' => $datos["hora"],
+        'lugar' => $datos["lugar"],
+        'prioridad' => $datos["prioridad"]
       ]);
       //Supervisamos si la inserción se realizó correctamente... 
       if ($query) {

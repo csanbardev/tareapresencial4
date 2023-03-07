@@ -42,7 +42,7 @@
             <span class="badge badge-secondary"><?= $dato['nombre'] ?></span>
             <span class="badge badge-secondary"><?= date("d-m-Y",strtotime($dato['fecha'])).'/'.$dato['hora'] ?></span>
             <div class="pt-4">
-              <a href=<?= 'index.php?accion=actEntrada&id=' . $dato['id'] ?> class="btn btn-secondary">Editar</a>
+              <a href=<?= 'index.php?accion=actTarea&id=' . $dato['id'] ?> class="btn btn-secondary">Editar</a>
               <a class="btn btn-danger" data-toggle="modal" data-target=<?= '#modal-' . $dato['id'] ?>>Eliminar</a>
             </div>
           </div>
