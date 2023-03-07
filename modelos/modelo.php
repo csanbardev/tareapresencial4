@@ -190,7 +190,7 @@ class modelo
   /**
    * Añade una entrada a partir de unos datos
    */
-  public function addentrada($datos)
+  public function addtarea($datos)
   {
     $return = [
       "correcto" => false,
@@ -201,18 +201,20 @@ class modelo
       //Inicializamos la transacción
       $this->conexion->beginTransaction();
       //Definimos la instrucción SQL parametrizada 
-      $sql = "INSERT INTO entradas(usuario_id,categoria_id,titulo,imagen, descripcion, fecha)
-                       VALUES (:usuario_id,:categoria_id,:titulo, :imagen, :descripcion, :fecha)";
+      $sql = "INSERT INTO tareas(categoria_id,titulo,imagen, descripcion, fecha, hora, lugar, prioridad)
+                       VALUES (:categoria_id,:titulo, :imagen, :descripcion, :fecha, :hora, :lugar, :prioridad)";
       // Preparamos la consulta...
       $query = $this->conexion->prepare($sql);
       // y la ejecutamos indicando los valores que tendría cada parámetro
       $query->execute([
-        'usuario_id' => $datos["id"],
         'categoria_id' => $datos["categoria"],
         'titulo' => $datos["titulo"],
         'imagen' => $datos["imagen"],
         'descripcion' => $datos["descripcion"],
-        'fecha' => $datos["fecha"]
+        'fecha' => $datos["fecha"],
+        'hora' => $datos["hora"],
+        'lugar' => $datos["lugar"],
+        'prioridad' => $datos["prioridad"]
       ]); //Supervisamos si la inserción se realizó correctamente... 
       if ($query) {
         $this->conexion->commit(); // commit() confirma los cambios realizados durante la transacción

@@ -117,7 +117,6 @@ class controlador
 
     // Actúa si se pulsa el botón de guardar
     if (isset($_POST) && !empty($_POST) && isset($_POST['submit'])) {
-      $id = $_POST['txtid'];
       $categoria = $_POST['slcategoria'];
 
 
@@ -132,6 +131,28 @@ class controlador
         $titulo = filter_var($titulo, FILTER_UNSAFE_RAW);
       } else {
         $errores["txttitulo"] = "El título introducido no es válido :(";
+      }
+
+      // validación de la prioridad
+      if (
+        !empty($_POST["txtprioridad"])
+        && (strlen($_POST["txtprioridad"]) <= 20)
+      ) {
+        $prioridad = trim($_POST["txtprioridad"]);
+        $prioridad = filter_var($prioridad, FILTER_UNSAFE_RAW);
+      } else {
+        $errores["txtprioridad"] = "La prioridad introducida no es válida :(";
+      }
+
+      // validación del lugar
+      if (
+        !empty($_POST["txtlugar"])
+        && (strlen($_POST["txtlugar"]) <= 20)
+      ) {
+        $lugar = trim($_POST["txtlugar"]);
+        $lugar = filter_var($lugar, FILTER_UNSAFE_RAW);
+      } else {
+        $errores["txtlugar"] = "El lugar introducido no es válido :(";
       }
 
       // validación de la descripción
@@ -150,6 +171,13 @@ class controlador
         $fecha = $_POST['dtfecha'];
       } else {
         $errores["dtfecha"] = "Introduce una fecha";
+      }
+
+      // validación de la hora (que se haya asignado)
+      if (!empty($_POST['txthora'])) {
+        $hora = $_POST['txthora'];
+      } else {
+        $errores["txthora"] = "Introduce una hora";
       }
 
 
@@ -187,39 +215,41 @@ class controlador
       }
       // si no hay errores, se registra la entrada
       if (count($errores) == 0) {
-        $resultModelo = $this->modelo->addentrada([
-          'id' => $id,
+        $resultModelo = $this->modelo->addtarea([
           'titulo' => $titulo,
           "descripcion" => $descripcion,
           'fecha' => $fecha,
           'categoria' => $categoria,
-          'imagen' => $imagen
+          'imagen' => $imagen,
+          'hora' => $hora,
+          'lugar' => $lugar,
+          'prioridad' => $prioridad
         ]);
         if ($resultModelo["correcto"]) :
           $this->mensajes[] = [
             "tipo" => "success",
-            "mensaje" => "La entrada se registró correctamente!! :)"
+            "mensaje" => "La tarea se registró correctamente!! :)"
           ];
-          // inserto el registro de logs
-          $resultModelo = $this->modelo->insertarlog([
-            "fecha" => date('y-m-d'),
-            'hora' => date('H:i:s'),
-            "operacion" => 'añadir',
-            "usuario" => $_SESSION['nick']
-          ]);
+          // // inserto el registro de logs
+          // $resultModelo = $this->modelo->insertarlog([
+          //   "fecha" => date('y-m-d'),
+          //   'hora' => date('H:i:s'),
+          //   "operacion" => 'añadir',
+          //   "usuario" => $_SESSION['nick']
+          // ]);
 
 
 
         else :
           $this->mensajes[] = [
             "tipo" => "danger",
-            "mensaje" => "La entrada no pudo registrarse!! :( <br />({$resultModelo["error"]})"
+            "mensaje" => "La tarea no pudo registrarse!! :( <br />({$resultModelo["error"]})"
           ];
         endif;
       } else {
         $this->mensajes[] = [
           "tipo" => "danger",
-          "mensaje" => "Datos de registro de entrada erróneos!! :("
+          "mensaje" => "Datos de registro de tarea erróneos!! :("
         ];
       }
     }
@@ -227,13 +257,16 @@ class controlador
 
 
     $parametros = [
-      "tituloventana" => "Recetazas | Añadir",
+      "tituloventana" => "TODO | Añadir",
       "datos" => [
         "txttitulo" => isset($titulo) ? $titulo : "",
         "txtdescripcion" => isset($descripcion) ? $descripcion : "",
         "dtfecha" => isset($fecha) ? $fecha : "",
         "slcategoria" => isset($categoria) ? $categoria : "",
-        "imagen" => isset($imagen) ? $imagen : ""
+        "imagen" => isset($imagen) ? $imagen : "",
+        "txthora" => isset($hora) ? $hora : "",
+        "txtlugar" => isset($lugar) ? $lugar : "",
+        "txtprioridad" => isset($prioridad) ? $prioridad : "",
       ],
       "categorias" => null,
       "mensajes" => [],
@@ -245,7 +278,7 @@ class controlador
     if ($resultModelo['correcto']) {
       $this->mensajes[] = [
         "tipo" => "success",
-        "mensaje" => "Sesión iniciada con éxito"
+        "mensaje" => ""
       ];
       $parametros["categorias"] = $resultModelo["datos"];
     } else {
@@ -256,7 +289,7 @@ class controlador
     }
 
     $parametros['mensajes'] = $this->mensajes;
-    include_once 'vistas/addentrada.php';
+    include_once 'vistas/addtarea.php';
   }
 
   /**

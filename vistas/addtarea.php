@@ -9,7 +9,7 @@
     <?php foreach ($parametros["mensajes"] as $mensaje) : ?>
       <div class="alert alert-<?= $mensaje["tipo"] ?>"><?= $mensaje["mensaje"] ?></div>
     <?php endforeach; ?>
-    <form action="index.php?accion=addEntrada" method="POST" enctype="multipart/form-data">
+    <form action="index.php?accion=addTarea" method="POST" enctype="multipart/form-data">
       <label for="titulo">Título
         <input name="txttitulo" class="form-control" type="text" value="<?= $parametros["datos"]["txttitulo"] ?>">
         <?= isset($parametros['errores']['txttitulo']) ? '<div class="alert alert-danger">' . $parametros['errores']['txttitulo'] . '</div>' : "" ?>
@@ -29,6 +29,21 @@
 
       </label>
       <br>
+      <label for="titulo">Inserta la hora
+        <input name="txthora" class="form-control" type="text" value="<?= $parametros["datos"]["txthora"] ?>">
+        <?= isset($parametros['errores']['txthora']) ? '<div class="alert alert-danger">' . $parametros['errores']['txthora'] . '</div>' : "" ?>
+      </label>
+      <br>
+      <label for="titulo">Inserta el lugar
+        <input name="txtlugar" class="form-control" type="text" value="<?= $parametros["datos"]["txtlugar"] ?>">
+        <?= isset($parametros['errores']['txtlugar']) ? '<div class="alert alert-danger">' . $parametros['errores']['txtlugar'] . '</div>' : "" ?>
+      </label>
+      <br>
+      <label for="titulo">Inserta la prioridad
+        <input name="txtprioridad" class="form-control" type="text" value="<?= $parametros["datos"]["txtprioridad"] ?>">
+        <?= isset($parametros['errores']['txtprioridad']) ? '<div class="alert alert-danger">' . $parametros['errores']['txtprioridad'] . '</div>' : "" ?>
+      </label>
+      <br>
       <label for="imagen">Inserta la imagen
         <input name="imagen" class="form-control" type="file" name="imagen" id="">
         <?= isset($parametros['errores']['imagen']) ? '<div class="alert alert-danger">' . $parametros['errores']['imagen'] . '</div>' : "" ?>
@@ -39,13 +54,13 @@
           <?php
           foreach ($parametros['categorias'] as $ctg) :
           ?>
-            <option value=<?= $ctg['id'] ?>><?= $ctg['nombre'] ?></option>
+            <option value=<?= $ctg['id_categoria'] ?>><?= $ctg['nombre'] ?></option>
           <?php endforeach; ?>
 
         </select>
       </label>
       <br>
-      <input type="hidden" name="txtid" value=<?= $_SESSION['id'] ?>>
+      
       <input class="btn btn-primary" type="submit" name="submit">
     </form>
   </div>

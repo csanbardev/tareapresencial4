@@ -25,7 +25,7 @@
       $html = $html . $_SESSION['nick'];
       $html = $html . '">Entradas</a>';
       if ($_SESSION['nick'] == 'user') { // el usuario podrá añadir entradas, el admin no
-        $html = $html . '<a class="dropdown-item" href="index.php?accion=addEntrada">Añadir</a>';
+        $html = $html . '<a class="dropdown-item" href="index.php?accion=addTarea">Añadir</a>';
       }
       if ($_SESSION['nick'] == 'admin') { // el administrador podrá ver el listado de logs 
         $html = $html . '<a class="dropdown-item" href="index.php?accion=listarLogs">Ver logs</a>';
