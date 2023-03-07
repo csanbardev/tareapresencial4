@@ -113,6 +113,9 @@ class modelo
     ];
 
     try {
+      // obtenemos la fecha de hoy
+      $fechaActual = date("Y-m-d");
+
       // establecemos el número de registros por página: por defecto 4
       $regsxpag = isset($_GET['regsxpag']) ? (int) $_GET['regsxpag'] : 4;
 
@@ -125,8 +128,10 @@ class modelo
 
 
       $sql = "select SQL_CALC_FOUND_ROWS * from tareas 
+      inner join categorias on tareas.categoria_id=categorias.id_categoria 
+      order by tareas.fecha, tareas.hora $orden 
       
-      inner join categorias on tareas.categoria_id=categorias.id_categoria order by tareas.fecha $orden limit $inicio, $regsxpag";
+      limit $inicio, $regsxpag";
 
       $resultsquery = $this->conexion->prepare($sql);
       $resultsquery->execute();
