@@ -139,6 +139,8 @@
 
     <?php endif;  //if($totalregistros>=1): 
     ?>
+    <br>
+    <a <?= count($parametros['datos'])<=0? 'style="display: none"':''?> href="index.php?accion=imprimirEntradas" class="btn btn-primary">Imprimir en pdf</a>
   </div>
   <?php require_once 'includes/footer.php' ?>
 </body>

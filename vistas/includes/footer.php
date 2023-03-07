@@ -2,7 +2,7 @@
 
   <!-- Copyright -->
   <div class="footer-copyright text-center py-3">© 2022 Copyright:
-    <a href="/"> Recetazas.com</a>
+    <a href="/"> TODO LIST</a>
   </div>
   <!-- Copyright -->
 

@@ -1,8 +1,8 @@
 <?php
 require_once 'modelos/modelo.php';
-//require_once './vendor/autoload.php';
+require_once './vendor/autoload.php';
 
-//use Spipu\Html2Pdf\Html2Pdf;
+use Spipu\Html2Pdf\Html2Pdf;
 
 class controlador
 {
@@ -653,7 +653,9 @@ class controlador
       foreach ($parametros["datos"] as $dato) {
         $html2pdf->writeHTML('Titulo: ' . $dato['titulo'] . '<br>');
         $html2pdf->writeHTML('Descripción: ' . $dato['descripcion'] . '<br>');
-        $html2pdf->writeHTML('Autor: ' . $dato['nick'] . '<br>');
+        $html2pdf->writeHTML('Prioridad: ' . $dato['prioridad'] . '<br>');
+        $html2pdf->writeHTML('Hora: ' . $dato['hora'] . '<br>');
+        $html2pdf->writeHTML('Lugar: ' . $dato['lugar'] . '<br>');
         $html2pdf->writeHTML('Categoría: ' . $dato['nombre'] . '<br>');
         $html2pdf->writeHTML('Fecha de publicación: ' . $dato['fecha'] . '<br>');
         // $html2pdf->writeHTML('Imagen: '. '<img style="width:100px;height:100px;" src=images/' . $dato['imagen']. 'alt="Card image">');
