@@ -129,12 +129,13 @@ class modelo
 
       $sql = "select SQL_CALC_FOUND_ROWS * from tareas 
       inner join categorias on tareas.categoria_id=categorias.id_categoria 
+      where fecha = :fecha
       order by tareas.fecha, tareas.hora $orden 
       
       limit $inicio, $regsxpag";
 
       $resultsquery = $this->conexion->prepare($sql);
-      $resultsquery->execute();
+      $resultsquery->execute(['fecha' => $fechaActual]);
       if ($resultsquery) {
         $return['correcto'] = true;
         $return['datos'] = $resultsquery->fetchAll(PDO::FETCH_ASSOC);

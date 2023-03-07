@@ -179,7 +179,7 @@ class controlador
         $_SESSION['nick'] = $_POST["txtnick"];
         $_SESSION['iniciada'] = true;
 
-        include_once 'vistas/inicio.php';
+        $this->index();
       } else {
         $this->mensajes[] = [
           "tipo" => "danger",
@@ -431,7 +431,7 @@ class controlador
     unset($_SESSION['iniciada']);
     session_destroy();
 
-    $this->index();
+    $this->iniciarSesion();
   }
 
   /**
