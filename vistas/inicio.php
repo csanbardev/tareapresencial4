@@ -8,9 +8,9 @@
     <?php foreach ($parametros["mensajes"] as $mensaje) : ?>
       <div class="alert alert-<?= $mensaje["tipo"] ?>"><?= $mensaje["mensaje"] ?></div>
     <?php endforeach; ?>
-    <h1>Tareas de hoy para <?=$_SESSION['nick']?></h1>  
+    <h1>Tareas de hoy para <?= $_SESSION['nick'] ?></h1>
     <br>
-    <div class="dropdown" <?= count($parametros['datos'])<=0? 'style="display: none"':''?>>
+    <div class="dropdown" <?= count($parametros['datos']) <= 0 ? 'style="display: none"' : '' ?>>
       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
         Ordenar por fecha
       </button>
@@ -19,12 +19,22 @@
         <a class="dropdown-item" href="index.php?orden=asc">Más antiguo primero</a>
       </div>
     </div>
-    <br>  
+    <br>
+    <!-- FORMULARIO PARA BUSCAR TAREAS POR TÍTULO -->
+    <form class="form-inline" action="index.php?accion=buscarTareas" method="POST">
+      <label for="tarea">Título tarea:
+        <input type="text" name="txttitulo" class="form-control" placeholder="Tarea" id="txttitulo" required>
+      </label>
+      
+      <button type="submit" class="btn btn-primary" name="submit">Buscar</button>
+    </form>
+
+    <br>
     <?php
-       if(count($parametros['datos'])<=0){
-        echo '<h2>No hay tareas para mostrar :C</h2>';
-       } 
-       ?>
+    if (count($parametros['datos']) <= 0) {
+      echo '<h2>No hay tareas para mostrar :C</h2>';
+    }
+    ?>
     <div class="row">
 
       <?php
@@ -40,7 +50,7 @@
             <span class="badge badge-primary">Prioridad: <?= $dato['prioridad'] ?></span>
             <span class="badge badge-primary">Lugar: <?= $dato['lugar'] ?></span><br>
             <span class="badge badge-secondary"><?= $dato['nombre'] ?></span>
-            <span class="badge badge-secondary"><?= date("d-m-Y",strtotime($dato['fecha'])).'/'.$dato['hora'] ?></span>
+            <span class="badge badge-secondary"><?= date("d-m-Y", strtotime($dato['fecha'])) . '/' . $dato['hora'] ?></span>
             <div class="pt-4">
               <a href=<?= 'index.php?accion=actTarea&id=' . $dato['id'] ?> class="btn btn-secondary">Editar</a>
               <a class="btn btn-danger" data-toggle="modal" data-target=<?= '#modal-' . $dato['id'] ?>>Eliminar</a>
@@ -79,7 +89,7 @@
       ?>
 
     </div>
-    <br>    
+    <br>
     <br>
     <?php //Sólo mostramos los enlaces a páginas si existen registros a mostrar
     if ($parametros['paginacion']['totalregistros'] >= 1) :
@@ -110,7 +120,7 @@
               // compruebo que se haya indicado un orden
               if (isset($_GET['orden'])) {
                 echo '<li class="page-item"> 
-                <a class="page-link" href="index.php?pagina=' . $i . '&regsxpag=' . $parametros['paginacion']['regsxpag'] .'&orden=' . $_GET['orden'] . '">' . $i . '</a></li>';
+                <a class="page-link" href="index.php?pagina=' . $i . '&regsxpag=' . $parametros['paginacion']['regsxpag'] . '&orden=' . $_GET['orden'] . '">' . $i . '</a></li>';
               } else {
                 echo '<li class="page-item"> 
                   <a class="page-link" href="index.php?pagina=' . $i . '&regsxpag=' . $parametros['paginacion']['regsxpag'] . '">' . $i . '</a></li>';
@@ -121,10 +131,10 @@
           if ($parametros['paginacion']['pagina'] == $parametros['paginacion']['numpaginas']) : ?>
             <li class="page-item disabled"><a class="page-link" href="#">&raquo;</a></li>
           <?php else : ?>
-            <li class="page-item"><a class="page-link" href="index.php?pagina=<?php echo $parametros['paginacion']['pagina'] + 1; ?>&regsxpag=<?= $parametros['paginacion']['regsxpag'] ?><?= isset($_GET['orden'])?'&orden='.$_GET['orden']:""?>"> &raquo; </a></li>
+            <li class="page-item"><a class="page-link" href="index.php?pagina=<?php echo $parametros['paginacion']['pagina'] + 1; ?>&regsxpag=<?= $parametros['paginacion']['regsxpag'] ?><?= isset($_GET['orden']) ? '&orden=' . $_GET['orden'] : "" ?>"> &raquo; </a></li>
           <?php endif; ?>
         </ul>
-        
+
       </nav>
 
     <?php endif;  //if($totalregistros>=1): 

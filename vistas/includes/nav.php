@@ -20,7 +20,7 @@
         <a class="dropdown-item" href="' .
         'index.php?accion=';
 
-      
+
 
       $html = $html . $_SESSION['nick'];
       $html = $html . '">Entradas</a>';
@@ -36,8 +36,8 @@
 </li>';
 
       echo $html;
-    } 
+    }
     ?>
   </ul>
- 
+
 </nav>

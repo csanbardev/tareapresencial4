@@ -157,6 +157,66 @@ class modelo
     return $return;
   }
 
+
+
+  /**
+   * Lista todas las entradas en un determinado orden y con opciones de paginación
+   */
+  public function listarTareasPorNombre($titulo, $orden)
+  {
+    $return = [
+      "correcto" => false,
+      "datos" => null,
+      "error" => null
+    ];
+
+    try {
+
+      
+      // obtenemos la fecha de hoy
+      $fechaActual = date("Y-m-d");
+
+      // establecemos el número de registros por página: por defecto 4
+      $regsxpag = isset($_GET['regsxpag']) ? (int) $_GET['regsxpag'] : 4;
+
+      // establecemos la página que se mostrará. por defecto, la 1
+      $pagina = isset($_GET['pagina']) ? (int) $_GET['pagina'] : 1;
+
+      //Definimos la variable $inicio que indique la posición del registro desde el que se
+      // mostrarán los registros de una página dentro de la paginación.
+      $inicio = ($pagina > 1) ? (($pagina * $regsxpag) - $regsxpag) : 0;
+
+
+      $sql = "select SQL_CALC_FOUND_ROWS * from tareas 
+      inner join categorias on tareas.categoria_id=categorias.id_categoria 
+      where titulo = :titulo
+      order by tareas.fecha, tareas.hora $orden 
+      limit $inicio, $regsxpag";
+
+      $resultsquery = $this->conexion->prepare($sql);
+      $resultsquery->execute(['titulo' => $titulo]);
+      if ($resultsquery) {
+        $return['correcto'] = true;
+        $return['datos'] = $resultsquery->fetchAll(PDO::FETCH_ASSOC);
+
+        $totalregistros = $this->conexion->query("select found_rows() as total");
+        $totalregistros = $totalregistros->fetch()['total'];
+
+        $numpaginas = ceil($totalregistros / $regsxpag);
+        $return['paginacion'] = [
+          "numpaginas" => $numpaginas,
+          "pagina" => $pagina,
+          "totalregistros" => $totalregistros,
+          "regsxpag" => $regsxpag
+        ];
+      }
+    } catch (PDOException $ex) {
+      $return['error'] = $ex->getMessage();
+    }
+
+    return $return;
+  }
+
   /**
    * Elimina la entrada con el id que se le indique
    */

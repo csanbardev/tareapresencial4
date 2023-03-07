@@ -62,6 +62,51 @@ class controlador
   }
 
 
+  public function buscarTareas(){
+    $orden = "desc"; // por defecto, el orden será descendente
+
+    // Almacenamos en el array 'parametros[]'los valores que vamos a mostrar en la vista
+    $parametros = [
+      "tituloventana" => "TODO | Últimas tareas",
+      "datos" => null,
+      "mensajes" => [],
+      "paginacion" => null
+    ];
+
+    // si se especifica el orden, lo aplicamos aquí
+    if (isset($_GET['orden'])) {
+      $orden = $_GET['orden'];
+    }
+
+    if(isset($_POST['submit']) && isset($_POST['txttitulo'])){
+      $titulo = $_POST['txttitulo'];
+    }
+
+    // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
+    $resultModelo = $this->modelo->listarTareasPorNombre($titulo,$orden);
+
+    if ($resultModelo["correcto"]) :
+      $parametros["datos"] = $resultModelo["datos"];
+      $parametros["paginacion"] = $resultModelo['paginacion'];
+      //Definimos el mensaje para el alert de la vista de que todo fue correctamente
+      $this->mensajes[] = [
+        "tipo" => "success",
+        "mensaje" => "El listado se realizó correctamente"
+      ];
+    else :
+      //Definimos el mensaje para el alert de la vista de que se produjeron errores al realizar el listado
+      $this->mensajes[] = [
+        "tipo" => "danger",
+        "mensaje" => "El listado no pudo realizarse correctamente!! :( <br/>({$resultModelo["error"]})"
+      ];
+    endif;
+
+    $parametros["mensajes"] = $this->mensajes;
+
+    include_once 'vistas/inicio.php';
+  }
+
+
 
   /**
    * Toma los datos del formulario de sesión y, si todo es correcto, crear la sesión
