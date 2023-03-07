@@ -17,7 +17,7 @@ class controlador
   }
 
   /**
-   * Muestra la pestaña de inici con el listado completo de las entradas sin operaciones
+   * Muestra la pestaña de inici con el listado completo de las tareas
    */
   public function index()
   {
@@ -25,7 +25,7 @@ class controlador
 
     // Almacenamos en el array 'parametros[]'los valores que vamos a mostrar en la vista
     $parametros = [
-      "tituloventana" => "Recetazas | Últimas entradas",
+      "tituloventana" => "TODO | Últimas tareas",
       "datos" => null,
       "mensajes" => [],
       "paginacion" => null
@@ -38,7 +38,7 @@ class controlador
 
 
     // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
-    $resultModelo = $this->modelo->listarEntradas($orden);
+    $resultModelo = $this->modelo->listarTareas($orden);
     
     if ($resultModelo["correcto"]) :
       $parametros["datos"] = $resultModelo["datos"];
@@ -61,116 +61,7 @@ class controlador
     include_once 'vistas/inicio.php';
   }
 
-  /**
-   * Muestra las entradas del usuario que haya iniciado sesión
-   */
-  public function listadoUsuario($id)
-  {
-    $orden = "desc"; // por defecto el orden será descendente
-    // Almacenamos en el array 'parametros[]'los valores que vamos a mostrar en la vista
-    $parametros = [
-      "tituloventana" => "Recetazas | Usuario",
-      "datos" => NULL,
-      "mensajes" => [],
-      "paginacion" => null
-    ];
-    if (isset($id) && is_numeric($id)) {
-      // comprobamos que se haya especificado un orden
-      if (isset($_GET['orden'])) {
-        $orden = $_GET['orden'];
-      }
-      // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
-      $resultModelo = $this->modelo->listarEntradasUsuario($id, $orden);
-      // Si la consulta se realizó correctamente transferimos los datos obtenidos
-      // de la consulta del modelo ($resultModelo["datos"]) a nuestro array parámetros
-      // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos
-      if ($resultModelo["correcto"]) :
-        $parametros["datos"] = $resultModelo["datos"];
-        $parametros['paginacion'] = $resultModelo['paginacion'];
-        //Definimos el mensaje para el alert de la vista de que todo fue correctamente
-        $this->mensajes[] = [
-          "tipo" => "success",
-          "mensaje" => "El listado se realizó correctamente"
-        ];
-
-        // inserto el registro de logs
-        $resultModelo = $this->modelo->insertarlog([
-          "fecha" => date('y-m-d'),
-          'hora' => date('H:i:s'),
-          "operacion" => 'listar entradas',
-          "usuario" => $_SESSION['nick']
-        ]);
-
-
-      else :
-        //Definimos el mensaje para el alert de la vista de que se produjeron errores al realizar el listado
-        $this->mensajes[] = [
-          "tipo" => "danger",
-          "mensaje" => "El listado no pudo realizarse correctamente!! :( <br/>({$resultModelo["error"]})"
-        ];
-      endif;
-    }
-    //Asignanis al campo 'mensajes' del array de parámetros el valor del atributo 
-    //'mensaje', que recoge cómo finalizó la operación:
-    $parametros["mensajes"] = $this->mensajes;
-    // Incluimos la vista en la que visualizaremos los datos o un mensaje de error
-    include_once 'vistas/listado.php';
-  }
-
-  /**
-   * Muestra todas las entradas de todos los usuarios para la vista del administrador
-   */
-  public function listadoAdmin()
-  {
-    $orden = "desc"; // por defecto, el orden será descendente
-
-    $parametros = [
-      "tituloventana" => "Recetazas | Administrador",
-      "datos" => null,
-      "mensajes" => [],
-      "paginacion" => null
-    ];
-
-    // comprobamos si se ha especificado un orden
-    if (isset($_GET['orden'])) {
-      $orden = $_GET['orden'];
-    }
-
-    // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
-    $resultModelo = $this->modelo->listarEntradas($orden);
-    // Si la consulta se realizó correctamente transferimos los datos obtenidos
-    // de la consulta del modelo ($resultModelo["datos"]) a nuestro array parámetros
-    // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos
-    if ($resultModelo["correcto"]) :
-      $parametros["datos"] = $resultModelo["datos"];
-      $parametros['paginacion'] = $resultModelo['paginacion'];
-      //Definimos el mensaje para el alert de la vista de que todo fue correctamente
-      $this->mensajes[] = [
-        "tipo" => "success",
-        "mensaje" => "El listado se realizó correctamente"
-      ];
-
-      // inserto el registro de logs
-      $resultModelo = $this->modelo->insertarlog([
-        "fecha" => date('y-m-d'),
-        'hora' => date('H:i:s'),
-        "operacion" => 'listar entradas',
-        "usuario" => $_SESSION['nick']
-      ]);
-
-    else :
-      //Definimos el mensaje para el alert de la vista de que se produjeron errores al realizar el listado
-      $this->mensajes[] = [
-        "tipo" => "danger",
-        "mensaje" => "El listado no pudo realizarse correctamente!! :( <br/>({$resultModelo["error"]})"
-      ];
-    endif;
-    //Asignanis al campo 'mensajes' del array de parámetros el valor del atributo 
-    //'mensaje', que recoge cómo finalizó la operación:
-    $parametros["mensajes"] = $this->mensajes;
-
-    include_once 'vistas/listado.php';
-  }
+  
 
   /**
    * Toma los datos del formulario de sesión y, si todo es correcto, crear la sesión
@@ -197,7 +88,7 @@ class controlador
         // creo las variables de sesión
         $_SESSION['nick'] = $_POST["txtnick"];
         $_SESSION['iniciada'] = true;
-        
+
         include_once 'vistas/inicio.php';
       } else {
         $this->mensajes[] = [
@@ -219,7 +110,7 @@ class controlador
    * por el formulario para crear la entrada nueva en la base de datos
    * 
    */
-  public function addEntrada()
+  public function addTarea()
   {
 
     $errores = array();
@@ -407,7 +298,7 @@ class controlador
       ];
     }
     //Relizamos el listado de los usuarios
-    $_SESSION['rol'] == "user" ? $this->listadoUsuario($_SESSION['id']) : $this->listadoAdmin();
+   // TODO: AQUÍ DEBE IR A ALGÚN LAO
   }
 
   /**
@@ -415,7 +306,7 @@ class controlador
    */
   public function cerrarSesion()
   {
-    unset($_SESSION['id']);
+    
     unset($_SESSION['nick']);
     unset($_SESSION['iniciada']);
     session_destroy();

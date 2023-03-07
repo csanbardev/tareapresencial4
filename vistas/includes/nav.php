@@ -20,18 +20,14 @@
         <a class="dropdown-item" href="' .
         'index.php?accion=';
 
-      if ($_SESSION['rol'] == 'admin') {
-        $html = $html . 'listadoAdmin' . '&id=';
-      } else {
-        $html = $html . 'listadoUsuario' . '&id=';
-      }
+      
 
-      $html = $html . $_SESSION['id'];
+      $html = $html . $_SESSION['nick'];
       $html = $html . '">Entradas</a>';
       if ($_SESSION['nick'] == 'user') { // el usuario podrá añadir entradas, el admin no
         $html = $html . '<a class="dropdown-item" href="index.php?accion=addEntrada">Añadir</a>';
       }
-      if ($_SESSION['rol'] == 'admin') { // el administrador podrá ver el listado de logs 
+      if ($_SESSION['nick'] == 'admin') { // el administrador podrá ver el listado de logs 
         $html = $html . '<a class="dropdown-item" href="index.php?accion=listarLogs">Ver logs</a>';
       }
       $html = $html .

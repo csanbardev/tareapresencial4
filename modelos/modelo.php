@@ -5,7 +5,7 @@ class modelo
   private $host = "localhost";
   private $user = "root";
   private $pass = "";
-  private $db = "bdblog";
+  private $db = "bdlistatodo";
 
   public function __construct()
   {
@@ -50,9 +50,9 @@ class modelo
 
 
 
-      $sql = "select entradas.id, entradas.usuario_id, entradas.categoria_id, entradas.titulo, entradas.imagen, entradas.descripcion, entradas.fecha, usuarios.nick, categorias.nombre from entradas 
-      inner join usuarios on entradas.usuario_id=usuarios.id
-      inner join categorias on entradas.categoria_id=categorias.id";
+      $sql = "select * from tareas 
+      
+      inner join categorias on tareas.categoria_id=categorias.id_categoria";
 
       $resultsquery = $this->conexion->prepare($sql);
       $resultsquery->execute();
@@ -70,7 +70,7 @@ class modelo
   /**
    * Devuelve una entrada con el id que se le indique
    */
-  public function listarEntrada($id)
+  public function listarTarea($id)
   {
     $return = [
       "correcto" => false,
@@ -82,10 +82,10 @@ class modelo
 
 
 
-      $sql = "select entradas.id, entradas.usuario_id, entradas.categoria_id, entradas.titulo, entradas.imagen, entradas.descripcion, entradas.fecha, usuarios.nick, categorias.nombre from entradas 
-      inner join usuarios on entradas.usuario_id=usuarios.id
-      inner join categorias on entradas.categoria_id=categorias.id
-      where entradas.id=:id";
+      $sql = "select * from tareas 
+      
+      inner join categorias on tareas.categoria_id=categorias.id_categoria
+      where tareas.id=:id";
 
       $query = $this->conexion->prepare($sql);
       $query->execute(['id' => $id]);
@@ -104,7 +104,7 @@ class modelo
   /**
    * Lista todas las entradas en un determinado orden y con opciones de paginación
    */
-  public function listarEntradas($orden)
+  public function listarTareas($orden)
   {
     $return = [
       "correcto" => false,
@@ -124,9 +124,9 @@ class modelo
       $inicio = ($pagina > 1) ? (($pagina * $regsxpag) - $regsxpag) : 0;
 
 
-      $sql = "select SQL_CALC_FOUND_ROWS entradas.id, entradas.usuario_id, entradas.categoria_id, entradas.titulo, entradas.imagen, entradas.descripcion, entradas.fecha, usuarios.nick, categorias.nombre from entradas 
-      inner join usuarios on entradas.usuario_id=usuarios.id
-      inner join categorias on entradas.categoria_id=categorias.id order by entradas.fecha $orden limit $inicio, $regsxpag";
+      $sql = "select SQL_CALC_FOUND_ROWS * from tareas 
+      
+      inner join categorias on tareas.categoria_id=categorias.id_categoria order by tareas.fecha $orden limit $inicio, $regsxpag";
 
       $resultsquery = $this->conexion->prepare($sql);
       $resultsquery->execute();
