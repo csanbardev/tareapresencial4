@@ -19,15 +19,7 @@
         <a class="dropdown-item" href="index.php?orden=asc">Más antiguo primero</a>
       </div>
     </div>
-    <br>
-    <!-- FORMULARIO PARA BUSCAR TAREAS POR TÍTULO -->
-    <form class="form-inline" action="index.php?accion=buscarTareas" method="POST">
-      <label for="tarea">Título tarea:
-        <input type="text" name="txttitulo" class="form-control" placeholder="Tarea" id="txttitulo" required>
-      </label>
-      
-      <button type="submit" class="btn btn-primary" name="submit">Buscar</button>
-    </form>
+    
 
     <br>
     <?php
@@ -139,6 +131,29 @@
 
     <?php endif;  //if($totalregistros>=1): 
     ?>
+    <br>
+    <!-- FORMULARIO PARA BUSCAR TAREAS POR TÍTULO -->
+    <h3>Buscar tareas</h3>
+    <form class="form-inline" action="index.php?accion=buscarTareas" method="POST">
+      <label for="tarea">Título tarea:
+        <input type="text" name="txttitulo" class="form-control" placeholder="Tarea" id="txttitulo" required>
+      </label>
+      
+      <button type="submit" class="btn btn-primary" name="submit">Buscar</button>
+    </form>
+    <br>
+    <!-- FORMULARIO PARA LISTAR POR RANGO -->
+    <h3>Listar por rango de fechas</h3>
+    <form class="form-inline" action="index.php?accion=buscarTareasRango" method="POST">
+      <label for="tarea">Fecha de inicio
+        <input type="date" name="dtfechainicio" id="">
+      </label>
+      <label for="tarea">Fecha de fin
+        <input type="date" name="dtfechafin" id="">
+      </label>
+      
+      <button type="submit" class="btn btn-primary" name="submit">Buscar</button>
+    </form>
     <br>
     <a <?= count($parametros['datos'])<=0? 'style="display: none"':''?> href="index.php?accion=imprimirEntradas" class="btn btn-primary">Imprimir en pdf</a>
   </div>
