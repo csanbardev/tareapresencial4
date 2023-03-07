@@ -272,13 +272,13 @@ class controlador
             "tipo" => "success",
             "mensaje" => "La tarea se registró correctamente!! :)"
           ];
-        // // inserto el registro de logs
-        // $resultModelo = $this->modelo->insertarlog([
-        //   "fecha" => date('y-m-d'),
-        //   'hora' => date('H:i:s'),
-        //   "operacion" => 'añadir',
-        //   "usuario" => $_SESSION['nick']
-        // ]);
+        // inserto el registro de logs
+         $resultModelo = $this->modelo->insertarlog([
+           "fecha" => date('y-m-d'),
+           'hora' => date('H:i:s'),
+           "operacion" => 'añadir',
+           "usuario" => $_SESSION['nick']
+         ]);
 
 
 
@@ -351,13 +351,13 @@ class controlador
           "tipo" => "success",
           "mensaje" => "Se eliminó correctamente la tarea"
         ];
-        // // inserto el registro de logs
-        // $resultModelo = $this->modelo->insertarlog([
-        //   "fecha" => date('y-m-d'),
-        //   'hora' => date('H:i:s'),
-        //   "operacion" => 'eliminar',
-        //   "usuario" => $_SESSION['nick']
-        // ]);
+         // inserto el registro de logs
+         $resultModelo = $this->modelo->insertarlog([
+           "fecha" => date('y-m-d'),
+           'hora' => date('H:i:s'),
+           "operacion" => 'eliminar',
+           "usuario" => $_SESSION['nick']
+         ]);
 
 
       else :
@@ -530,13 +530,13 @@ class controlador
             "mensaje" => "La tarea se ha actualizado correctamente"
           ];
 
-          // // inserto el registro de logs
-          // $resultModelo = $this->modelo->insertarlog([
-          //   "fecha" => date('y-m-d'),
-          //   'hora' => date('H:i:s'),
-          //   "operacion" => 'actualizar',
-          //   "usuario" => $_SESSION['nick']
-          // ]);
+           // inserto el registro de logs
+           $resultModelo = $this->modelo->insertarlog([
+             "fecha" => date('y-m-d'),
+             'hora' => date('H:i:s'),
+             "operacion" => 'actualizar',
+             "usuario" => $_SESSION['nick']
+           ]);
         } else {
           $this->mensajes[] = [
             "tipo" => "danger",
@@ -682,7 +682,7 @@ class controlador
   public function listarLogs()
   {
     $parametros = [
-      "tituloventana" => "Recetazas | Logs",
+      "tituloventana" => "TODO | Logs",
       "datos" => null,
       "mensajes" => [],
       "paginacion" => null

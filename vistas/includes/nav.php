@@ -7,6 +7,9 @@
     <li class="nav-item active">
       <a class="nav-link" href="index.php">Inicio</a>
     </li>
+    <li class="nav-item active">
+      <a class="nav-link" href="index.php?accion=listarLogs">Registros logs</a>
+    </li>
 
     <?php
 

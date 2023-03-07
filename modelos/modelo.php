@@ -345,65 +345,7 @@ class modelo
     return $return;
   }
 
-  /**
-   * Lista las entradas de un usuario en un orden concreto y a partir de la id del usuario
-   */
-  public function listarEntradasUsuario($id, $orden)
-  {
-    $return = [
-      "correcto" => FALSE,
-      "datos" => NULL,
-      "error" => NULL
-    ];
-
-    if (is_numeric($id)) {
-      try {
-        $regsxpag = isset($_GET['regsxpag']) ? (int) $_GET['regsxpag'] : 4;
-
-        // establecemos la página que se mostrará. por defecto, la 1
-        $pagina = isset($_GET['pagina']) ? (int) $_GET['pagina'] : 1;
-
-        //Definimos la variable $inicio que indique la posición del registro desde el que se
-        // mostrarán los registros de una página dentro de la paginación.
-        $inicio = ($pagina > 1) ? (($pagina * $regsxpag) - $regsxpag) : 0;
-
-
-
-
-        $sql = "select SQL_CALC_FOUND_ROWS entradas.id, entradas.usuario_id, entradas.categoria_id, entradas.titulo, entradas.imagen, entradas.descripcion, entradas.fecha, usuarios.nick, categorias.nombre from entradas 
-      inner join usuarios on entradas.usuario_id=usuarios.id
-      inner join categorias on entradas.categoria_id=categorias.id
-        where entradas.usuario_id=:id
-        
-        order by entradas.fecha $orden
-        limit $inicio, $regsxpag";
-
-        $query = $this->conexion->prepare($sql);
-        $query->execute(['id' => $id]);
-        //Supervisamos que la consulta se realizó correctamente... 
-        if ($query) {
-          $return["correcto"] = true;
-          $return["datos"] = $query->fetchAll(PDO::FETCH_ASSOC);
-
-          $totalregistros = $this->conexion->query("select found_rows() as total");
-          $totalregistros = $totalregistros->fetch()['total'];
-
-          $numpaginas = ceil($totalregistros / $regsxpag);
-          $return['paginacion'] = [
-            "numpaginas" => $numpaginas,
-            "pagina" => $pagina,
-            "totalregistros" => $totalregistros,
-            "regsxpag" => $regsxpag
-          ];
-        } // o no :(
-      } catch (PDOException $ex) {
-        $return["error"] = $ex->getMessage();
-        //die();
-      }
-    }
-
-    return $return;
-  }
+ 
 
   /**
    * Recupera el usuario que coincida con el nick y la contraseña que se le pase
