@@ -293,32 +293,32 @@ class controlador
    * Elimina la entrada que se le pase por GET y redirige al listado del usuario correspondiente
    * 
    */
-  public function delEntrada()
+  public function delTarea()
   {
     if (isset($_GET['id']) && (is_numeric($_GET['id']))) {
       $id = $_GET["id"];
       //Realizamos la operación de suprimir el usuario con el id=$id
-      $resultModelo = $this->modelo->delEntrada($id);
+      $resultModelo = $this->modelo->delTarea($id);
       //Analizamos el valor devuelto por el modelo para definir el mensaje a 
       //mostrar en la vista listado
       if ($resultModelo["correcto"]) :
         $this->mensajes[] = [
           "tipo" => "success",
-          "mensaje" => "Se eliminó correctamente la entrada"
+          "mensaje" => "Se eliminó correctamente la tarea"
         ];
-        // inserto el registro de logs
-        $resultModelo = $this->modelo->insertarlog([
-          "fecha" => date('y-m-d'),
-          'hora' => date('H:i:s'),
-          "operacion" => 'eliminar',
-          "usuario" => $_SESSION['nick']
-        ]);
+        // // inserto el registro de logs
+        // $resultModelo = $this->modelo->insertarlog([
+        //   "fecha" => date('y-m-d'),
+        //   'hora' => date('H:i:s'),
+        //   "operacion" => 'eliminar',
+        //   "usuario" => $_SESSION['nick']
+        // ]);
 
 
       else :
         $this->mensajes[] = [
           "tipo" => "danger",
-          "mensaje" => "Algo ha fallado al elimninar la entrada <br/>({$resultModelo["error"]})"
+          "mensaje" => "Algo ha fallado al elimninar la tarea <br/>({$resultModelo["error"]})"
         ];
       endif;
     } else { //Si no recibimos el valor del parámetro $id generamos el mensaje indicativo:
@@ -327,8 +327,8 @@ class controlador
         "mensaje" => "Error al acceder a la id de la entrada"
       ];
     }
-    //Relizamos el listado de los usuarios
-    // TODO: AQUÍ DEBE IR A ALGÚN LAO
+    // Volvemos a inicio
+    $this->index();
   }
 
   /**

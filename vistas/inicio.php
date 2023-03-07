@@ -55,18 +55,18 @@
 
               <!-- Modal Header -->
               <div class="modal-header">
-                <h4 class="modal-title">Eliminar entrada</h4>
+                <h4 class="modal-title">Eliminar tarea</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
               </div>
 
               <!-- Modal body -->
               <div class="modal-body">
-                ¿Seguro que quieres borrar esta entrada?
+                ¿Seguro que quieres borrar esta tarea?
               </div>
 
               <!-- Modal footer -->
               <div class="modal-footer">
-                <a class="btn btn-danger" href=<?= 'index.php?accion=delEntrada&id=' . $dato['id'] ?>>Aceptar</a>
+                <a class="btn btn-danger" href=<?= 'index.php?accion=delTarea&id=' . $dato['id'] ?>>Aceptar</a>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
               </div>
 

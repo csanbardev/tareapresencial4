@@ -155,7 +155,7 @@ class modelo
   /**
    * Elimina la entrada con el id que se le indique
    */
-  public function delentrada($id)
+  public function deltarea($id)
   {
 
     $return = [
@@ -168,7 +168,7 @@ class modelo
         //Inicializamos la transacción
         $this->conexion->beginTransaction();
         //Definimos la instrucción SQL parametrizada 
-        $sql = "DELETE FROM entradas WHERE id=:id";
+        $sql = "DELETE FROM tareas WHERE id=:id";
         $query = $this->conexion->prepare($sql);
         $query->execute(['id' => $id]);
         //Supervisamos si la eliminación se realizó correctamente... 
